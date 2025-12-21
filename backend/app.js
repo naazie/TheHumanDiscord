@@ -4,6 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 
 import AuthRoutes from "./modules/auth/auth.routes.js";
+import ServerRoutes from "./modules/server/server.routes.js"
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(morgan("dev"));
 
 // rputes
 app.use("/api/auth", AuthRoutes);
+app.use("/api/server", ServerRoutes);
 
 // health check
 app.get("/health", (req, res) => {
