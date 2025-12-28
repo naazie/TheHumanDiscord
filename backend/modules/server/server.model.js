@@ -1,7 +1,7 @@
 // modules/server/server.module.js
 import mongoose from "mongoose";
 
-const serverSchema = mongoose.Schema(
+const serverSchema = new mongoose.Schema(
     {
         // name, owner, members
         name: {

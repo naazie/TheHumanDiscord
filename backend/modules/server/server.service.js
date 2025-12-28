@@ -1,4 +1,5 @@
 // modules/server/server.service.js
+import Channel from "../channels/channel.model.js";
 import Server from "./server.model.js";
 
 function isNotValidName(name) {
@@ -17,6 +18,14 @@ class ServerService
             owner: ownerId,
             members: [ownerId]
         });
+
+        // name, createdby, type, server, isPrivate, allowedRoles, allowedUsers
+        await Channel.create({
+            name: "General",
+            server: newServer._id,
+            createdBy: ownerId,
+            isPrivate: false
+        })
 
         return {
             id: newServer._id,
