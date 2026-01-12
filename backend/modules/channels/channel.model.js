@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 
 const ChannelModel = new mongoose.Schema(
-    // name, createdby, type, server, isPrivate, allowedRoles, allowedUsers
+    // name, createdby, type, server, isPrivate, allowedRoles, allowedUsers, isDeleted
     {
         name: {
             type: String,
@@ -43,9 +43,6 @@ const ChannelModel = new mongoose.Schema(
             type: Boolean,
             default: false
         }
-
-
-
     },
     { timestamps: true }
 )

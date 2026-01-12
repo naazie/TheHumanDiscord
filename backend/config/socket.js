@@ -1,3 +1,4 @@
+// config/socket.js
 import { Server } from "socket.io";
 
 export const initSocket = (server) => {

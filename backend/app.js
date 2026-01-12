@@ -4,7 +4,9 @@ import cors from "cors";
 import morgan from "morgan";
 
 import AuthRoutes from "./modules/auth/auth.routes.js";
-import ServerRoutes from "./modules/server/server.routes.js"
+import ServerRoutes from "./modules/server/server.routes.js";
+import ChannelRoutes from "./modules/channels/channel.routes.js";
+import MessageRoutes from "./modules/message/message.routes.js";
 
 const app = express();
 
@@ -17,6 +19,8 @@ app.use(morgan("dev"));
 // rputes
 app.use("/api/auth", AuthRoutes);
 app.use("/api/server", ServerRoutes);
+app.use("/api", ChannelRoutes);
+app.use("/api", MessageRoutes);
 
 // health check
 app.get("/health", (req, res) => {
