@@ -8,7 +8,7 @@ const router = express.Router();
 // when accessing a channel, check isServer member first
 
 // create channel
-router.post("/servers/:serverId/channels", isAuthorised, isOwner, ChannelController.createChannel);
+router.post("/servers/:serverId/channels", isAuthorised, isServerMember, isOwner, ChannelController.createChannel);
 
 // get channels of a server
 router.get("/servers/:serverId/channels", isAuthorised, isServerMember,ChannelController.getChannelsInServer);

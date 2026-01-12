@@ -10,7 +10,8 @@ export async function isServerMember(req, res, next) {
         {
             return res.status(404).json({error: "Server not found"});
         }
-        const isMember = isServer.members.some(memberId => memberId.toString() === userId);
+        // const isMember = isServer.members.some(memberId => memberId.toString() === userId);
+        const isMember = isServer.members.some(memberId => memberId && memberId.toString() === userId);
         if(!isMember)
         {
             return res.status(403).json({error: "Member not present"});
@@ -31,7 +32,7 @@ export async function isOwner(req, res, next) {
         {
             return res.status(500).json({error: "Server context missing"});
         }
-        if(server.owner.toString() !== userId)
+        if(!server.owner || server.owner.toString() !== userId)
         {
             return res.status(403).json({error: "Only server owner has access"});
         }

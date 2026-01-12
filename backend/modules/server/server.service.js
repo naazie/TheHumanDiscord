@@ -21,7 +21,7 @@ class ServerService
 
         // name, createdby, type, server, isPrivate, allowedRoles, allowedUsers
         await Channel.create({
-            name: "General",
+            name: "general",
             server: newServer._id,
             createdBy: ownerId,
             isPrivate: false

@@ -4,7 +4,7 @@ import ChannelService from "./channel.service.js";
 class ChannelController {
     async createChannel(req, res) {
         try {
-            const createdBy = req.user._id;
+            const createdBy = req.user.id;
             const { serverId } = req.params; 
             const {name,isPrivate = false, allowedRoles = [], allowedUsers = []} = req.body;
             const newChannel = await ChannelService.createChannel({name, serverId, isPrivate, allowedRoles, allowedUsers, createdBy});
@@ -28,7 +28,7 @@ class ChannelController {
         try {
             // hannelId, userId, newName, newType, newIsPrivate, newAllowedRoles, newAllowedUsers
             const { channelId } = req.params;
-            const userId  = req.user._id;
+            const userId  = req.user.id;
             const { newName, newType, newIsPrivate, newAllowedRoles, newAllowedUsers } = req.body;
             const updated = await ChannelService.updateChannel({channelId, userId, newName, newType, newIsPrivate, newAllowedRoles, newAllowedUsers});
             return res.status(200).json({success: true, data: updated});

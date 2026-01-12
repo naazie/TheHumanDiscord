@@ -17,9 +17,14 @@ async function startServer() {
 
     const server = http.createServer(app);
 
+    // server.listen(PORT, () => {
+    //   console.log(`Server running on port ${PORT}`);
+
+    const io = initSocket(server);
     server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
+    // });
   } catch (error) {
     console.error("Failed to start server:", error);
     process.exit(1);

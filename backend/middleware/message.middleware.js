@@ -6,7 +6,7 @@ import Server from "../modules/server/server.model.js"
 export async function isMessageAccessible(req, res, next) {
     try {
         const {messageId} = req.params;
-        const userId = req.user._id;
+        const userId = req.user.id;
         const message = await Message.findOne({_id: messageId, isDeleted: false }).select("_id sender channel")
         if(!message)
             return res.status(404).json({error: "Message not found"});
