@@ -21,6 +21,7 @@ async function startServer() {
     //   console.log(`Server running on port ${PORT}`);
 
     const io = initSocket(server);
+    app.set("io", io);
     server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });

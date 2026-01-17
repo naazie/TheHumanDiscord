@@ -7,6 +7,8 @@ class MessageController {
             // contentt senderid, channelid
             const {content} = req.body;
             const newMessage = await MessageService.createMessage({content: content, senderId: req.user.id, channel: req.channel});
+            const io = req.app.get("io");
+            io.to(req.channel._id.toString()).emit("new-message", newMessage);
             return res.status(201).json({success: true, data: newMessage});
         } catch (error) {
             return res.status(400).json({error: error.message});

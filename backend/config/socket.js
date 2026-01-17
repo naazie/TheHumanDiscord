@@ -1,11 +1,19 @@
 // config/socket.js
 import { Server } from "socket.io";
 import { registerMessageSockets } from "../sockets/message.socket.js";
+import { authenticateSocket } from "../sockets/socketAuth.js";
+import { registerTypingSockets } from "../sockets/typing.socket.js";
+import { registerOnlinePresence } from "../sockets/presence.socket.js";
+import { registerReadSockets } from "../sockets/read.socket.js";
+import { registerMessageEditsSocket } from "../sockets/messageEdit.socket.js";
 
 export const initSocket = (server) => {
   const io = new Server(server, {
     cors: { origin: "*" }
   });
+
+  io.use(authenticateSocket);
+
   // return io;
   io.on("connection", (socket) => {
     console.log("client connected ", socket.id);
@@ -31,7 +39,10 @@ export const initSocket = (server) => {
     // });
 
     registerMessageSockets(io, socket);
-    
+    registerTypingSockets(io, socket);
+    registerOnlinePresence(io, socket);
+    registerReadSockets(io, socket);
+    registerMessageEditsSocket(io, socket);
 
     socket.on("disconnect", (socket) => {
       console.log("client disconnected: ", socket.id);
