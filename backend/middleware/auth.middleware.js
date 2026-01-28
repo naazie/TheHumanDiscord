@@ -34,8 +34,7 @@ export function isAuthorised(req, res, next)
         }
         // Attach decoded payload to req.user
         req.user = {
-            "id": isValid.id,
-            "email": isValid.email
+            id: isValid.id
         };
         // Call next()
         next();
