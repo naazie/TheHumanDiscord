@@ -1,8 +1,15 @@
 import React from 'react'
+import ServerSidebar from './ServerSidebar'
+import ChannelList from './ChannelList'
+import ChatInterface from './ChatInterface'
 
 function HomePage() {
   return (
-    <div className="flex min-h-screen w-screen flex-col justify-center px-6 py-12 lg:px-8 bg-[#21141E] text-violet-300 font-extrabold text-center">HomePage Babyyyyyyyy</div>
+    <div className="flex min-h-screen w-screen bg-[#21141E]">
+        <ServerSidebar/>
+        <ChannelList className="z-0"/>
+        <ChatInterface className="z-1"/>
+    </div>
   )
 }
 

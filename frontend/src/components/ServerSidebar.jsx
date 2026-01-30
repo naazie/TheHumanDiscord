@@ -1,0 +1,33 @@
+import React, { useEffect } from 'react'
+import { useServerStore } from '../stores/server.store.js'
+
+function ServerSidebar() {
+    const { servers, activeServer, loadServers, setActiveServer } = useServerStore();
+    useEffect(() => {
+        loadServers();
+    }, [])
+  return (
+    <div className='relative'>
+        <div className='absolute inset-y-0 left-0 bg-[#21141E] w-16 min-h-screen'>
+            <div className="m-3 relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-neutral-tertiary rounded-full bg-[#66435eb4] ">
+                <span className="font-medium text-body text-violet-300">HN</span>
+            </div>
+            <hr className='text-[#66435eb4]' />
+            {/* add the servers here */}
+            {servers.map((server) => { 
+                const isActive = activeServer?._id === server._id;
+                return (
+                <div key={server._id} 
+                onClick={() => setActiveServer(server)} 
+                className= {`m-3 relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-neutral-tertiary rounded-full bg-[#66435eb4]
+                ${isActive ? 'ring-1 ring-[#d3a8c9] ring-offset-2 ring-offset-[#d3a8c9]' : ''}`}>
+                    <span className="font-medium text-body  text-violet-300 ">{server.name[0]}</span>
+                </div>
+            )})}
+        </div>
+    </div>
+
+  )
+}
+
+export default ServerSidebar
