@@ -2,6 +2,7 @@
 
 // import Channel from "../channels/channel.model.js";
 import Message from "./message.model.js"
+import User from "../auth/auth.model.js"
 
 function validContent(content) {
     return typeof content === "string" && content.trim().length > 0;
@@ -21,9 +22,11 @@ class MessageService {
         }
         if(!validContent(content))
             throw new Error("Content invalid");
+        const user = await User.findById(senderId).select("_id username")
         const message = await Message.create({
             content: content.trim(),
             channel: channel._id,
+            senderName: user.username,
             sender: senderId
         });
         return ({
@@ -31,6 +34,7 @@ class MessageService {
             content: message.content,
             sender: message.sender,
             channel: message.channel,
+            senderName: message.senderName,
             createdAt: message.createdAt
         })
     }
@@ -49,8 +53,8 @@ class MessageService {
         }
 
         const messages = await Message.find(query)
-            .select("_id content sender channel createdAt")
-            .sort({ createdAt: -1 })
+            .select("_id content sender senderName channel createdAt")
+            .sort({ createdAt: 1 })
             .limit(Number(limit));
 
         // const messages = await Message.find({channel: channel._id, isDeleted: false}).select("_id content sender channel createdAt").sort({ createdAt: -1 });
@@ -67,11 +71,12 @@ class MessageService {
             throw new Error("Not authorised to edit");
         if(!validContent(newContent))
             throw new Error("Invalid content");
-        const edited = await Message.findByIdAndUpdate(messageId, {content: newContent.trim(), edited: true}, {new: true}).select("_id content sender edited channel createdAt");
+        const edited = await Message.findByIdAndUpdate(messageId, {content: newContent.trim(), edited: true}, {new: true}).select("_id content sender senderName edited channel createdAt");
         return ({
             _id: edited._id,
             content: edited.content,
             sender: edited.sender,
+            senderName: edited.senderName,
             channel: edited.channel,
             createdAt: edited.createdAt
         })
@@ -84,11 +89,12 @@ class MessageService {
             throw new Error("Message doesn't exist");
         if(userId.toString() !== message.sender.toString())
             throw new Error("Not authorised to delete");
-        const deleted = await Message.findByIdAndUpdate(messageId, {isDeleted: true}, {new: true}).select("_id content sender edited channel createdAt");
+        const deleted = await Message.findByIdAndUpdate(messageId, {isDeleted: true}, {new: true}).select("_id content sender senderName edited channel createdAt");
         return ({
             _id: deleted._id,
             content: deleted.content,
             sender: deleted.sender,
+            senderName: deleted.senderName,
             channel: deleted.channel,
             createdAt: deleted.createdAt
         })

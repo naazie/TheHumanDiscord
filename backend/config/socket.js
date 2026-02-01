@@ -44,7 +44,7 @@ export const initSocket = (server) => {
     registerReadSockets(io, socket);
     registerMessageEditsSocket(io, socket);
 
-    socket.on("disconnect", (socket) => {
+    socket.on("disconnect", () => {
       console.log("client disconnected: ", socket.id);
     });
   });

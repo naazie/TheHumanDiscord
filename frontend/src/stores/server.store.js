@@ -20,5 +20,7 @@ export const useServerStore = create((set) => ({
             set({ isLoading: false });
         }
     },
-    setActiveServer: (server) => set({ activeServer: res.servers[0] }),
+    setActiveServer: (server) => {
+        console.log(server._id);
+        set({ activeServer: server })}
 }))

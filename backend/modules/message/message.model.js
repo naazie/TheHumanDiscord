@@ -16,6 +16,11 @@ const MessageModel = mongoose.Schema(
             required: true,
             ref: "Channel"
         },
+        senderName : {
+            type: String,
+            required: true,
+            trim: true
+        },
         sender: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,

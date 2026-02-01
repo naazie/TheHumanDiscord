@@ -104,7 +104,7 @@ function ChatInterface() {
                 <div id='messages-end'></div>
             </div>
             
-            <div className=" bottom-0 flex-auto left-0 right-0 p-4 bg-[#2b1a27] ">
+            <div className=" bottom-0 left-0 right-0 p-4 bg-[#2b1a27] ">
                 <div className="flex items-center gap-3 bg-[#21141E] rounded-xl px-4 py-2 ">
                     <textarea
                     value = {message}
@@ -119,7 +119,7 @@ function ChatInterface() {
                         }}
                     }
                     placeholder={activeChannel ? `Message #${activeChannel.name}` : "Message #channel"}
-                    className="flex-1 resize-none max-h-24 leading-5 overflow-y-auto bg-[#333333] text-[#ffddf7] placeholder-[#ad9ca9] outline-none text-base pt-2.5"/>
+                    className="flex-1 resize-none max-h-24 leading-5 overflow-y-auto bg-transparent text-[#ffddf7] placeholder-[#ad9ca9] outline-none text-base pt-2.5"/>
                     <button 
                         onClick={handleSend}
                         className={`px-4 py-1.5 rounded-lg bg-[#66435e] text-[#ffddf7] text-sm font-medium hover:bg-[#7a4f70 active:scale-98 transition ${loading ? "disabled: opacity-70" : ""}`}>Send</button>
