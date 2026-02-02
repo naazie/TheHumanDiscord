@@ -6,9 +6,11 @@ import toast from 'react-hot-toast';
 import { faClover } from '@fortawesome/free-solid-svg-icons';
 import { useSocket } from '../context/SocketContext';
 import { useChannelSocket } from '../hooks/useChannelSocket';
+import { useMessageSocket } from '../hooks/messageSocket';
 
 function ChatInterface() {
     const {messages, activeMessage, loadMessages, setActiveMessage } = useMessageStore();
+    const {sendMessageSocket} = useMessageSocket();
     const activeChannel = useChannelStore((s) => s.activeChannel);
     useEffect(() => {
         if(activeChannel?._id) {
@@ -34,14 +36,15 @@ function ChatInterface() {
                 setLoading(false);
                 return;
             }
-            await addMessage(activeChannel?._id, message);
+            // await addMessage(activeChannel?._id, message);
+            sendMessageSocket(activeChannel?._id, message);
             setMessage("");
             requestAnimationFrame(() => {
                 const ta = document.querySelector("textarea");
                 if (ta) ta.style.height = "44px";
             });
         } catch (error) {
-            toast.error("Error Sending Message");
+            toast.error("Error Sending Message", error.message );
         }
         finally {
             setLoading(false);

@@ -23,6 +23,7 @@ export const useChannelSocket = ({channelId}) => {
 
         return () => {
             // can add socket.emit(leave channel) but currently i dont have it in backend so not added 
+            socket.emit("leave-channel", {channelId});
             // may be needed for typind presence
         }
     }, [channelId]);

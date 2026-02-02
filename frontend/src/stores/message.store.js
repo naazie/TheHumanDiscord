@@ -37,5 +37,10 @@ export const useMessageStore = create((set, get) => ({
         }
     },
 
+    addMessageSocket: (content) => {
+        console.log("called");
+        set({messages: [...get().messages, content]});
+    },
+
     setActiveMessage: (message) => set({ activeMessage: message }),
 }))
