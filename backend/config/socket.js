@@ -11,12 +11,17 @@ export const initSocket = (server) => {
   const io = new Server(server, {
     cors: { origin: "*" }
   });
-
+  
   io.use(authenticateSocket);
 
   // return io;
   io.on("connection", (socket) => {
     console.log("client connected ", socket.id);
+    console.log("socket.user:", socket.user);
+
+    socket.onAny((event, ...args) => {
+      console.log("EVENT:", event, args);
+    });
     // socket.on("ping", () => {
     //   console.log("Pinged");
     //   socket.emit("pong");

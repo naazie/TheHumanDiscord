@@ -10,15 +10,25 @@ export const registerMessageSockets = (io, socket) => {
             if(!channel || channel.isDeleted)
                 return socket.emit("socket-error", "channel not found");
             socket.join(channelId);
-
+            console.log("Rooms joined ",socket.rooms);
             // send history
             const messages = await MessageService.fetchMessages({channel});
             socket.emit("channel-history", messages.reverse());
         } catch (error) {
             socket.emit("socket-error", error.message);
         }
-        
     });
+
+    socket.on("leave-channel", async({channelId}) => {
+        try {
+            if (socket.rooms.has(channelId)) {
+                socket.leave(channelId);
+            }
+            console.log(channelId, " room left");
+        } catch (error) {
+            socket.emit("socket-error", error.message);
+        }
+    })
 
     socket.on("send-message", async ({channelId, content}) => {
         try {
