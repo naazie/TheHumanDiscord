@@ -2,6 +2,7 @@ import React from 'react'
 import ServerSidebar from './ServerSidebar'
 import ChannelList from './ChannelList'
 import ChatInterface from './ChatInterface'
+import UsersList from './UsersList'
 
 function HomePage() {
   return (
@@ -9,6 +10,7 @@ function HomePage() {
         <ServerSidebar/>
         <ChannelList className="z-0"/>
         <ChatInterface className="z-1"/>
+        <UsersList/>
     </div>
   )
 }
