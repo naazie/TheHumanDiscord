@@ -4,6 +4,8 @@ import { useChannelStore } from '../stores/channel.store';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import toast from 'react-hot-toast';
 import { faClover } from '@fortawesome/free-solid-svg-icons';
+import { useSocket } from '../context/SocketContext';
+import { useChannelSocket } from '../hooks/useChannelSocket';
 
 function ChatInterface() {
     const {messages, activeMessage, loadMessages, setActiveMessage } = useMessageStore();
@@ -62,6 +64,10 @@ function ChatInterface() {
             minute: "2-digit",
         });
     }
+
+    // Sockets 
+    // const channelId = activeChannel?._id; 
+    useChannelSocket({channelId: activeChannel?._id});
 
   return (
     <div className='relative min-h-screen min-w-296 content-center'>
