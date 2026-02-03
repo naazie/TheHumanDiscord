@@ -27,6 +27,15 @@ class AuthController {
             res.status(400).json({error: error.message});
         }
     }
+
+    async getAllUsers(req, res) {
+        try {
+            const users = await AuthService.getAllUsers();
+            res.status(200).json({success: true, users});
+        } catch (error) {
+            res.status(400).json({error: error.message});
+        }
+    }
 }
 
 export default new AuthController();

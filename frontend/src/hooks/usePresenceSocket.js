@@ -8,21 +8,22 @@ export const usePresenceSocket = () => {
     const onlineUser = usePresenceStore((s) => s.userOnline);
     const offlineUser = usePresenceStore((s) => s.userOffline);
 
-    const onlineHandler = (userId) => {
-        onlineUser(userId);
+    const onlineHandler = (data) => {
+        console.log("online handler running", data)
+        onlineUser(data.userId);
     }
 
-    const offlineHandler = (userId) => {
-        offlineUser(userId);
+    const offlineHandler = (data) => {
+        offlineUser(data.userId);
     }
     
     useEffect(() => {
-        socket.on("user-online",onlineHandler(userId));
-        socket.on("user-offline", offlineHandler(userId));
+        socket.on("user-online", onlineHandler);
+        socket.on("user-offline", offlineHandler);
 
         return () => {
-            socket.off("user-online");
-            socket.off("user-offline");
+            socket.off("user-online", onlineHandler);
+            socket.off("user-offline", offlineHandler);
         };
-    }, [socket, userOnline, userOffline])
+    }, [socket, onlineUser, offlineUser])
 };

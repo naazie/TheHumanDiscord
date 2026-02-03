@@ -25,6 +25,7 @@ function LoginPage() {
                 { email, password }
             )
             localStorage.setItem("token", res.data.user.token);
+            localStorage.setItem("username", res.data.user.user.username);
             toast.success("Welcome back to humanCore✨");
             navigate("/home");
         } catch (error) {

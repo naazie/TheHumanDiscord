@@ -17,5 +17,6 @@ router.get("/me", isAuthorised, (req, res) => {
         user: req.user
     });
 });
+router.get("/users", isAuthorised, AuthController.getAllUsers.bind(AuthController));
 
 export default router;

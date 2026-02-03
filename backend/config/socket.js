@@ -22,13 +22,6 @@ export const initSocket = (server) => {
   io.on("connection", (socket) => {
     console.log("client connected ", socket.id);
     console.log("socket.user:", socket.user);
-    const userId = socket.user.id;
-
-    const cnt = onlineUsers.get(userId) || 0;
-    onlineUsers.set(userId, cnt+1);
-
-    if(cnt === 0)
-      socket.emit("user-online", {userId});
 
     socket.onAny((event, ...args) => {
       console.log("EVENT:", event, args);
@@ -59,23 +52,6 @@ export const initSocket = (server) => {
     registerOnlinePresence(io, socket);
     registerReadSockets(io, socket);
     registerMessageEditsSocket(io, socket);
-
-    socket.on("disconnect", () => {
-      console.log("client disconnected: ", socket.id);
-
-      const userId = socket.user.id;
-      const cnt = onlineUsers.get(userId);
-      if(!cnt)
-        return;
-
-      if(cnt === 1)
-      {
-        onlineUsers.delete(userId);
-        socket.emit("user-offline", {userId});
-      }
-      else
-        onlineUsers.set(userId, cnt-1);
-    });
   });
   return io;
 };

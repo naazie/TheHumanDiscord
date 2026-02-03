@@ -13,7 +13,7 @@ function ServerSidebar() {
     }, [])
   return (
     <div className='relative'>
-        <div className='absolute inset-y-0 left-0 bg-[#21141E] w-16 min-h-screen'>
+        <div className='h-full flex-none overflow-y-auto flex flex-col no-scrollbar bg-[#21141E] '>
             <div className="m-3 relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-neutral-tertiary rounded-full bg-[#66435eb4] ">
                 <span className="font-medium text-body text-violet-300">HN</span>
             </div>

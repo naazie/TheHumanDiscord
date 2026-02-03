@@ -73,8 +73,8 @@ function ChatInterface() {
     useChannelSocket({channelId: activeChannel?._id});
 
   return (
-    <div className='relative min-h-screen min-w-296 content-center'>
-        <div className='absolute bg-[#2b1a27] h-49/50 inset-0 m-auto border-l-2 border-[#66435eb4] left-0 flex flex-col'>
+    <div className='relative min-h-screen content-center flex-1 min-w-0'>
+        <div className=' bg-[#2b1a27] border-l-2 border-[#66435eb4]  h-full  flex flex-col'>
             {activeChannel ? <h1 className='p-2 m-4 text-[#ffddf7] font-bold text-2xl text-left truncate'> 
                 <FontAwesomeIcon icon={faClover} className='mr-2  text-xl ' />
                 {activeChannel.name}

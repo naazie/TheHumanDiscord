@@ -11,13 +11,13 @@ export const registerOnlinePresence = async (io, socket) => {
 
     io.emit("user-online", {userId});
 
-    io.on("disconnect", () => {
+    socket.on("disconnect", () => {
         const sockets = onlineUsers.get(userId);
         if(!sockets)
             return;
         sockets.delete(socket.id);
 
-        if(sockets.size() === 0)
+        if(sockets.size === 0)
         {
             onlineUsers.delete(userId);
             io.emit("user-offline", {userId});
