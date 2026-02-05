@@ -27,7 +27,7 @@ function UsersList() {
     }, []);
 
     // Sort users: online first, then offline
-    const sortedUsers = allUsers.sort((a, b) => {
+    const sortedUsers = [...allUsers].sort((a, b) => {
         const aOnline = onlineUsers.has(a._id);
         const bOnline = onlineUsers.has(b._id);
         if (aOnline === bOnline) return 0;
@@ -54,11 +54,11 @@ function UsersList() {
             {/* Current User */}
             <div className="flex items-center gap-3">
                 <div className="relative">
-                    <div className="h-10 w-10 rounded-full bg-[#66435eb4] flex items-center justify-center text-white font-semibold">
+                    <div className="h-8 w-8 rounded-full bg-[#66435eb4] flex items-center justify-center text-white font-semibold">
                     {username[0].toUpperCase()}
                     </div>
                     <span
-                    className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-zinc-900
+                    className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-zinc-900
                         ${isOnline ? "bg-green-500" : "bg-gray-400"}`}
                     />
                 </div>
@@ -66,27 +66,28 @@ function UsersList() {
             </div>
 
             {/* Other Users */}
-            {isOpen && (
-                <div className="flex flex-col gap-2">
-                    {sortedUsers.filter(u => u._id !== user.user.id).map((u) => {
-                        const userIsOnline = onlineUsers.has(u._id);
-                        return (
-                            <div key={u._id} className="flex items-center gap-3">
-                                <div className="relative">
-                                    <div className="h-8 w-8 rounded-full bg-[#66435eb4] flex items-center justify-center text-white font-semibold text-sm">
-                                    {u.username[0].toUpperCase()}
-                                    </div>
-                                    <span
-                                    className={`absolute bottom-0 right-0 h-2 w-2 rounded-full border-2 border-zinc-900
-                                        ${userIsOnline ? "bg-green-500" : "bg-gray-400"}`}
-                                    />
+            
+            <div className="flex flex-col gap-2">
+                {sortedUsers.filter(u => u._id !== user.user.id).map((u) => {
+                    const userIsOnline = onlineUsers.has(u._id);
+                    return (
+                        <div key={u._id} className="flex items-center gap-3">
+                            <div className="relative">
+                                <div className="h-8 w-8 rounded-full bg-[#66435eb4] flex items-center justify-center text-white font-semibold text-sm">
+                                {u.username[0].toUpperCase()}
                                 </div>
-                                <span className="text-sm text-zinc-200 truncate">{u.username}</span>
+                                <span
+                                className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-zinc-900
+                                    ${userIsOnline ? "bg-green-500" : "bg-gray-400"}`}
+                                />
                             </div>
-                        );
-                    })}
-                </div>
-            )}
+                            {isOpen && (
+                                <span className="text-sm text-zinc-200 truncate">{u.username}</span>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
         </div>
 
     </div>

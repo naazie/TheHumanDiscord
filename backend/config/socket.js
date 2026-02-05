@@ -14,7 +14,7 @@ export const initSocket = (server) => {
     cors: { origin: "*" }
   });
 
-  const onlineUsers = new Map();
+  // export const onlineUsers = new Map();
 
   io.use(authenticateSocket);
 
@@ -48,10 +48,10 @@ export const initSocket = (server) => {
     // });
 
     registerMessageSockets(io, socket);
-    registerTypingSockets(io, socket);
     registerOnlinePresence(io, socket);
-    registerReadSockets(io, socket);
-    registerMessageEditsSocket(io, socket);
+    // registerTypingSockets(io, socket);
+    // registerReadSockets(io, socket);
+    // registerMessageEditsSocket(io, socket);
   });
   return io;
 };

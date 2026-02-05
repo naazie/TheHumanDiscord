@@ -1,6 +1,5 @@
 import toast from "react-hot-toast";
 import { create } from "zustand";
-import { onlineUsers } from "../../../backend/sockets/presence.store";
 
 export const usePresenceStore = create((set) => ({
     onlineUsers: new Set(),
@@ -8,6 +7,7 @@ export const usePresenceStore = create((set) => ({
     setOnlineUsers: (ids) => {
         set({onlineUsers: new Set(ids)});
     },
+    
 
     userOnline: (userId) => {
         set((s) => {
