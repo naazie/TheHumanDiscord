@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useMessageStore } from '../stores/message.store';
 import { useChannelStore } from '../stores/channel.store';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,8 @@ import { faClover } from '@fortawesome/free-solid-svg-icons';
 import { useSocket } from '../context/SocketContext';
 import { useChannelSocket } from '../hooks/useChannelSocket';
 import { useMessageSocket } from '../hooks/messageSocket';
+// import { useSocket } from "../context/SocketContext"
+import { socket } from '../socket/socket';
 
 function ChatInterface() {
     const {messages, activeMessage, loadMessages, setActiveMessage } = useMessageStore();
@@ -27,6 +29,11 @@ function ChatInterface() {
     const [loading, setLoading] = useState(false);
     const addMessage = useMessageStore((s) => s.addMessage);
 
+    // typing vars
+    const isTypingRef = useRef(false);
+    const stopTypingTimeoutRef = useRef(null);
+    const [typingUsers, setTypingUsers] = useState([]);
+
     const handleSend = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -38,6 +45,15 @@ function ChatInterface() {
             }
             // await addMessage(activeChannel?._id, message);
             sendMessageSocket(activeChannel?._id, message);
+            
+            // typing presence stop printing
+            if(isTypingRef.current) {
+                socket.emit("typing-stop", {channelId: activeChannel._id});
+                isTypingRef.current = false;
+            }
+
+            clearTimeout(stopTypingTimeoutRef.current);
+
             setMessage("");
             requestAnimationFrame(() => {
                 const ta = document.querySelector("textarea");
@@ -71,6 +87,51 @@ function ChatInterface() {
     // Sockets 
     // const channelId = activeChannel?._id; 
     useChannelSocket({channelId: activeChannel?._id});
+
+    // typing 
+    const socket = useSocket();
+    const handleTyping = () => {   
+        const channelId = activeChannel?._id; 
+        if(!isTypingRef.current)
+        {
+            socket.emit("typing-start", {channelId});
+            isTypingRef.current = true;
+        }
+
+        // reset i.e., stop typing
+        if(stopTypingTimeoutRef.current)
+        {
+            clearTimeout(stopTypingTimeoutRef.current);
+        }
+
+        stopTypingTimeoutRef.current = setTimeout(() => {
+            socket.emit("typing-stop", {channelId});
+            isTypingRef.current = false;
+        }, 2500);
+    }
+
+    useEffect(() => {
+        socket.on("user-typing", ({channelId: cId, user}) => {
+            // console.log("USER IS TYPING SMtH", cId, user);
+            if(cId !== activeChannel?._id) return;
+            setTypingUsers(prev => 
+                prev.some(u => u.id === user.id) ? prev : [...prev, user]
+            );
+            
+        });
+
+        socket.on("user-stop-typing", ({channelId: cId, user}) => {
+            if(cId !== activeChannel?._id) return;
+            setTypingUsers(prev => 
+                prev.filter(u => u.id !== user.id)
+            );
+        });
+
+        return () => {
+            socket.off("user-typing");
+            socket.off("user-stop-typing");
+        }
+    })
 
   return (
     <div className='relative min-h-screen content-center flex-1 min-w-0'>
@@ -114,12 +175,21 @@ function ChatInterface() {
             </div>
             
             <div className=" bottom-0 left-0 right-0 p-4 bg-[#2b1a27] ">
+                {typingUsers.length > 0 && (
+                    <div className="bg-[#311e2d] rounded-t-md text-[#bc9cb4] italic mb-0.5">
+                        <span className='ml-1'>
+                        {typingUsers.map(u => u.username).join(", ")}{" "}
+                        {typingUsers.length === 1 ? "is" : "are"} typing...</span>
+                    </div>
+                )}
                 <div className="flex items-center gap-3 bg-[#21141E] rounded-xl px-4 py-2 ">
                     <textarea
                     value = {message}
                     onChange={(e) => {setMessage(e.target.value);
                         e.target.style.height = "auto";
-                        e.target.style.height = `${e.target.scrollHeight}px`;}
+                        e.target.style.height = `${e.target.scrollHeight}px`;
+                        handleTyping();
+                    }
                     }
                     onKeyDown={(e) => {
                         if(e.key === 'Enter' && !e.shiftKey) {

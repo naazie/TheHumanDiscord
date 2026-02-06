@@ -71,6 +71,12 @@ class ServerService
             owner: updated.owner
         };
     }
+
+    async fetchMembers({serverId}) {
+        const members = await Server.findById(serverId).populate( "members", "_id username").lean();
+        console.log(members.members);
+        return members.members;
+    }
 }
 
 export default new ServerService;

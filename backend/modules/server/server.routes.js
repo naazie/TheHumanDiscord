@@ -12,6 +12,7 @@ const router = express.Router();
 router.post("/", isAuthorised, (req, res) => serverController.createServer(req, res));
 router.get("/", isAuthorised, (req, res) => serverController.getUserServers(req, res));
 router.get("/:serverId", isAuthorised, (req, res) => serverController.getServerById(req, res));
+router.get("/:serverId/members", isAuthorised, (req, res) => serverController.fetchMembers(req, res));
 router.delete("/:serverId", isAuthorised, isServerMember, isOwner, (req, res) => serverController.deleteServer(req, res));
 router.patch("/:serverId", isAuthorised, isServerMember, isOwner, (req, res) => serverController.updateServerName(req, res));
 

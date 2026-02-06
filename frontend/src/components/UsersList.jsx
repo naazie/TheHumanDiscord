@@ -4,35 +4,49 @@ import { faPeoplePulling } from '@fortawesome/free-solid-svg-icons';
 import { usePresenceStore } from '../stores/presence.store';
 import { useAuth } from '../context/AuthContext';
 import { getAllUsers } from './service/user.service';
+import { useServerStore } from '../stores/server.store.js';
 
 function UsersList() {
     const [isOpen, setIsOpen] = useState(false);
-    const [allUsers, setAllUsers] = useState([]);
+    // const [allUsers, setAllUsers] = useState([]);
     const {user} = useAuth();
     const username = localStorage.getItem("username");
+    const activeServer = useServerStore(s => s.activeServer);
+    // const members = useServerStore(s => s.getMembers(activeServer?._id));
+    const loadMembers = useServerStore(s => s.loadMembers);
+    const membersByServer = useServerStore(s => s.membersByServer);
+    const members = membersByServer[activeServer?._id] ?? [];
 
     const onlineUsers = usePresenceStore((s) => s.onlineUsers);
     const isOnline = onlineUsers.has(user.user.id);
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const users = await getAllUsers();
-                setAllUsers(users);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-        fetchUsers();
-    }, []);
+        if(activeServer?._id)
+        {
+            console.log()
+            loadMembers(activeServer._id);
+            // console.log(Array.isArray(members), members); // true
+            // console.log(typeof members[0]._id); // "string" 
+        }
+    }, [activeServer?._id]);
 
-    // Sort users: online first, then offline
-    const sortedUsers = [...allUsers].sort((a, b) => {
+    // useEffect(() => {
+    //     console.log("members updated:", members);
+    // }, [members]);  
+
+    const sortedUsers = [...members].sort((a, b) => {
         const aOnline = onlineUsers.has(a._id);
         const bOnline = onlineUsers.has(b._id);
         if (aOnline === bOnline) return 0;
         return aOnline ? -1 : 1;
     });
+
+    const handleTyping = () => {
+        if(!isTypingRef.current)
+        {
+            
+        }
+    }
 
   return (
     <div className={`mr-2 relative h-full min-w-0 flex-none bg-[#2b1a27] border-l border-[#66435eb4] transition-all duration-300 ease-in-out ${isOpen ? 'w-50' : 'w-16'}`}>

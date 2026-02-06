@@ -49,7 +49,7 @@ export const initSocket = (server) => {
 
     registerMessageSockets(io, socket);
     registerOnlinePresence(io, socket);
-    // registerTypingSockets(io, socket);
+    registerTypingSockets(io, socket);
     // registerReadSockets(io, socket);
     // registerMessageEditsSocket(io, socket);
   });

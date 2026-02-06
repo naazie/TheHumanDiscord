@@ -58,6 +58,16 @@ class ServerController {
             return res.status(500).json({error: error.message});
         }
     }
+
+    async fetchMembers(req, res) {
+        try {
+            const {serverId} = req.params;
+            const members = await ServerService.fetchMembers({serverId});
+            return res.status(200).json({success: true, members});
+        } catch (error) {
+            return res.status(500).json({error: error.message});
+        }
+    }
 }
 
 export default new ServerController;
