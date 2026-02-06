@@ -6,16 +6,17 @@ import toast from "react-hot-toast";
 export const useMessageStore = create((set, get) => ({
     messages: [],
     isLoading: false,
+    isMessagesLoading: false,
     activeMessage: null,
 
     loadMessages: async(channelId) => {
         if(!channelId)
             return;
-        set({isLoading: true});
+        set({isMessagesLoading: true});
 
         try {
             const res = await fetchMessages(channelId);
-            set({messages: res.data, isLoading: false});
+            set({messages: res.data, isMessagesLoading: false});
             console.log("Messages: ", res.data);
 
         } catch (error) {

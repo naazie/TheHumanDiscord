@@ -51,7 +51,7 @@ function UsersList() {
   return (
     <div className={`mr-2 relative h-full min-w-0 flex-none bg-[#2b1a27] border-l border-[#66435eb4] transition-all duration-300 ease-in-out ${isOpen ? 'w-50' : 'w-16'}`}>
         <div 
-        className='h-12 flex items-center justify-center border-b-2 border-[#66435eb4] cursor-pointer hover:bg-[#352230] transition-colors'
+        className='h-11 flex items-center justify-center  border-[#66435eb4] cursor-pointer hover:bg-[#352230] transition-colors'
         onClick={() => setIsOpen(!isOpen)}
         title={isOpen ? "Collapse Member List" : "Expand Member List"}>
             {isOpen ? 
@@ -64,6 +64,7 @@ function UsersList() {
                 </h1>
             }
         </div>
+        <hr className='text-[#66435eb4]'/>
         <div className="m-4 flex flex-col gap-3">
             {/* Current User */}
             <div className="flex items-center gap-3">

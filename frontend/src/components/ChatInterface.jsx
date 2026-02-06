@@ -9,9 +9,10 @@ import { useChannelSocket } from '../hooks/useChannelSocket';
 import { useMessageSocket } from '../hooks/messageSocket';
 // import { useSocket } from "../context/SocketContext"
 import { socket } from '../socket/socket';
+import MessagesSkeleton from './MessagesSkeleton';
 
 function ChatInterface() {
-    const {messages, activeMessage, loadMessages, setActiveMessage } = useMessageStore();
+    const {messages, activeMessage, loadMessages, isMessagesLoading, setActiveMessage } = useMessageStore();
     const {sendMessageSocket} = useMessageSocket();
     const activeChannel = useChannelStore((s) => s.activeChannel);
     useEffect(() => {
@@ -21,9 +22,11 @@ function ChatInterface() {
     }, [activeChannel?._id])
 
     useEffect(() => {
+        if (isMessagesLoading) return;
+
         const el = document.getElementById("messages-end");
         el?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
+    }, [messages, isMessagesLoading]);
 
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
@@ -133,10 +136,21 @@ function ChatInterface() {
         }
     })
 
+    // message temp
+    // const tempMessage = {
+    //     _id: `temp-${crypto.randomUUID()}`,
+    //     content: message,
+    //     senderId: user.id,
+    //     senderName: user.username,
+    //     channelId: activeChannel._id,
+    //     createdAt: new Date().toISOString(),
+    //     status: "sending", // sending | sent | failed
+    // };
+
   return (
     <div className='relative min-h-screen content-center flex-1 min-w-0'>
         <div className=' bg-[#2b1a27] border-l-2 border-[#66435eb4]  h-full  flex flex-col'>
-            {activeChannel ? <h1 className='p-2 m-4 text-[#ffddf7] font-bold text-2xl text-left truncate'> 
+            {activeChannel ? <h1 className='m-2 text-[#ffddf7] font-bold text-xl text-left truncate flex-none'> 
                 <FontAwesomeIcon icon={faClover} className='mr-2  text-xl ' />
                 {activeChannel.name}
             </h1>
@@ -147,32 +161,38 @@ function ChatInterface() {
             </h1>}
             <hr className='text-[#66435eb4]'/>
             {/* messages */}
-            <div className=" max-h-10/12 overflow-y-auto px-6 py-4 space-y-4 scrollbar-thin scrollbar-thumb-[#66435e] scrollbar-track-[#2b1a27] flex-auto rounded-lg">
-                <div>
-                    {messages.map((message) => (
-                        <div
-                        key={message._id}
-                        onClick={() => setActiveMessage(message)}
-                        className={`flex flex-col gap-1 min-w-280  hover:bg-[#251721] rounded-lg px-3 py-2 transition b-0
-                            ${activeMessage?._id == message._id ? "border border-[#683b5b] bg-[#251721]" : ""}`}
-                        >
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm font-semibold text-[#ffddf7]">
-                                {message.senderName}
-                                </span>
-                                <div className="text-xs text-[#ad9ca9]">
-                                {/* optional timestamp */}
-                                {formatTime(message.createdAt)}
+            {isMessagesLoading ? 
+                <MessagesSkeleton/>
+            :
+                <>
+                    <div className=" max-h-10/12 overflow-y-auto px-6 py-4 space-y-4 scrollbar-thin scrollbar-thumb-[#66435e] scrollbar-track-[#2b1a27] flex-auto rounded-lg">
+                    <div>
+                        {messages.map((message) => (
+                            <div
+                            key={message._id}
+                            onClick={() => setActiveMessage(message)}
+                            className={`flex flex-col gap-1 min-w-280  hover:bg-[#251721] rounded-lg px-3 py-2 transition b-0
+                                ${activeMessage?._id == message._id ? "border border-[#683b5b] bg-[#251721]" : ""}`}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm font-semibold text-[#ffddf7]">
+                                    {message.senderName}
+                                    </span>
+                                    <div className="text-xs text-[#ad9ca9]">
+                                    {/* optional timestamp */}
+                                    {formatTime(message.createdAt)}
+                                    </div>
+                                </div>
+                                <div className="text-sm text-[#e6dce4] leading-relaxed wrap-break-word">
+                                    {message.content}
                                 </div>
                             </div>
-                            <div className="text-sm text-[#e6dce4] leading-relaxed wrap-break-word">
-                                {message.content}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <div id='messages-end'></div>
-            </div>
+                        ))}
+                    </div>
+                    <div id='messages-end'></div>
+                    </div>
+                </>
+            }
             
             <div className=" bottom-0 left-0 right-0 p-4 bg-[#2b1a27] ">
                 {typingUsers.length > 0 && (

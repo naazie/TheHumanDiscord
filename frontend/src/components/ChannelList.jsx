@@ -20,7 +20,7 @@ function ChannelList() {
         <div className='relative min-h-screen content-center'>
             <div className='bg-[#2b1a27] h-full flex-none w-60 rounded-l-lg'>
                 <div className='absolute left-0 m-2 inset-0 w-3xs flex flex-col gap-1'>
-                    {activeServer && <h1 className='p-2 text-[#ffddf7] font-bold text-2xl text-center truncate'>{activeServer.name}</h1>}
+                    {activeServer && <h1 className='m-0.5 text-[#ffddf7] font-bold text-xl text-center truncate'>{activeServer.name}</h1>}
                     <hr className='text-[#66435eb4]'/>
                     {channels.map((channel) => {
                         const isActive = activeChannel?._id === channel._id;
